@@ -315,20 +315,6 @@
 		"mod": "x86-Generic",
 		"addons": ["readme.pdf"]
 	},
-	"WR1045": {
-		"details": "TP-Link WR1045ND",
-		"type": "2",
-		"build": "2102",
-		"flash": "8",
-		"config": ".config_wr1045",
-		"image1": "openwrt-ath79-generic-tplink_tl-wr1045nd-v2-squashfs-sysupgrade.bin",
-		"image2": "openwrt-ath79-generic-tplink_tl-wr1045nd-v2-squashfs-factory.bin",
-		"imagepath": "/ath79/generic/",
-		"mod": "TP-Link-Archer-WR1045ND",
-		"ext1": "-upgrade.bin",
-		"ext2": "-factory.bin",
-		"addons": ["readme.pdf"]
-	},
 	"NANOR2S": {
 		"details": "NanoPi R2S",
 		"type": "4",
@@ -768,5 +754,59 @@
 		"mod": "ZBT-WG1602-32M",
 		"ext": "-upgrade.bin",
 		"addons": ["readme.pdf", "readmerecovery.txt"]
+	},
+	"HUA1208V2": {
+		"details": "Huasifei WS1208V2",
+		"type": "1",
+		"package": "ext-huasifei",
+		"config": ".config_hua1208v2",
+		"image": "openwrt-ramips-mt7621-huasifei-ws1208v2-squashfs-sysupgrade.bin",
+		"imagepath": "/ramips/mt7621/",
+		"mod": "Huasifei-WS1208V2",
+		"ext": "-upgrade.bin",
+		"custom": {
+			"name": {
+				"model": "WS1208V2",
+				"hostname": "WS1208V2"
+			},
+			"wifi": {
+				"SSID2G": "wifi-2.4g",
+				"SSID5G": "wifi-5.8g",
+				"Password": "12345678"
+			},
+			"image": {
+				"Material": "hua.png",
+				"Argon": "hua.png",
+				"Tomato": "hua.png"
+			},
+			"files": "/huasifei/files1/"	
+		}
+	},
+	"HUA1208": {
+		"details": "Huasifei WS1208",
+		"type": "1",
+		"package": "ext-huasifei",
+		"config": ".config_hua1208",
+		"image": "openwrt-ramips-mt7621-zbtlink_zbt-wg3526-16m-squashfs-sysupgrade.bin",
+		"imagepath": "/ramips/mt7621/",
+		"mod": "Huasifei-WS1208",
+		"ext": "-upgrade.bin",
+		"custom": {
+			"name": {
+				"model": "WS1208",
+				"hostname": "WS1208"
+			},
+			"wifi": {
+				"SSID2G": "wifi-2.4g",
+				"SSID5G": "wifi-5.8g",
+				"Password": "12345678"
+			},
+			"image": {
+				"Material": "hua.png",
+				"Argon": "hua.png",
+				"Tomato": "hua.png"
+			},
+			"files": "/huasifei/files/"	
+		}
 	}
 }
