@@ -4,7 +4,7 @@ ROOTER=/usr/lib/rooter
 ROOTER_LINK="/tmp/links"
 
 log() {
-	logger -t "Lock Band" "$@"
+	modlog "Lock Band $CURRMODEM" "$@"
 }
 
 RESTART="1"
@@ -169,7 +169,7 @@ case $uVid in
 	"2c7c" )
 		MODT="1"
 		if [ -z "$2" ]; then
-			RESTART="0"
+			RESTART="1"
 		fi
 		M5=""
 		M2='AT+QCFG="band",0,'$mask',0,1'

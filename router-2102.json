@@ -753,7 +753,13 @@
 		"imagepath": "/ramips/mt7621/",
 		"mod": "ZBT-WG1602-32M",
 		"ext": "-upgrade.bin",
-		"addons": ["readme.pdf", "readmerecovery.txt"]
+		"addons": ["readme.pdf", "readmerecovery.txt"],
+		"custom": {
+			"name": {
+				"model": "ZBT WG1602-32M",
+				"hostname": "ROOter"
+			}
+		}
 	},
 	"HUA1208V2": {
 		"details": "Huasifei WS1208V2",
@@ -786,7 +792,7 @@
 		"details": "Huasifei WS1208",
 		"type": "1",
 		"package": "ext-huasifei",
-		"config": ".config_hua1208",
+		"config": ".config_wg3526",
 		"image": "openwrt-ramips-mt7621-zbtlink_zbt-wg3526-16m-squashfs-sysupgrade.bin",
 		"imagepath": "/ramips/mt7621/",
 		"mod": "Huasifei-WS1208",
@@ -808,5 +814,31 @@
 			},
 			"files": "/huasifei/files/"	
 		}
+	},
+	"DIR882A1": {
+		"details": "D-Link DIR-882 A1",
+		"type": "2",
+		"build": "2102",
+		"config": ".config_dir882a1",
+		"image1": "openwrt-ramips-mt7621-dlink_dir-882-a1-squashfs-sysupgrade.bin",
+		"image2": "openwrt-ramips-mt7621-dlink_dir-882-a1-squashfs-factory.bin",
+		"imagepath": "/ramips/mt7621/",
+		"mod": "D-Link-DIR-882-A1",
+		"ext1": "-upgrade.bin",
+		"ext2": "-factory.bin",
+		"addons": ["readme.pdf", "archer.txt"]
+	},
+	"DIR882R1": {
+		"details": "D-Link DIR-882 R1",
+		"type": "2",
+		"build": "2102",
+		"config": ".config_dir882r1",
+		"image1": "openwrt-ramips-mt7621-dlink_dir-882-r1-squashfs-sysupgrade.bin",
+		"image2": "openwrt-ramips-mt7621-dlink_dir-882-r1-squashfs-factory.bin",
+		"imagepath": "/ramips/mt7621/",
+		"mod": "D-Link-DIR-882-R1",
+		"ext1": "-upgrade.bin",
+		"ext2": "-factory.bin",
+		"addons": ["readme.pdf", "archer.txt"]
 	}
 }
