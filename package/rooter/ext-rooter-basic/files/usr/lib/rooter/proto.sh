@@ -1,39 +1,52 @@
 #!/bin/sh
 
 log() {
-	modlog "Protofind $CURRMODEM" "$@"
+	modlog "Protofind $idV/$idP" "$@"
 }
 
-CURRMODEM=$1
-DEVICENAME=$2
+idV=$1
+idP=$2
+DEVICENAME=$3
 path="/sys/bus/usb/devices/$DEVICENAME/"
-ipath="$DEVICENAME:1."
+cnfg=$(cat $path"bConfigurationValue")
+ipath="$DEVICENAME:$cnfg."
 
-cntr=0
+cntr=$(cat $path"bNumInterfaces")
+cntr=$(echo "$cntr" | sed 's/[[:space:]]//g')
+if [ $4 -eq 1 ]; then
+	log "Number Interfaces w/drivers : $cntr"
+fi
 serialcnt=0
 retval=0
+fcntr=0
+
 while [ true ]; do
-	if [ ! -e $path$ipath$cntr ]; then
-		break
-	else
-		cat $path$ipath$cntr"/uevent" > /tmp/uevent
-		source /tmp/uevent
-		rm -f /tmp/uevent
-		modlog "Driver Name : $DRIVER"
+	if [ -e $path$ipath$fcntr ]; then
+		DRIVER=""
+		cat $path$ipath$fcntr"/uevent" > /tmp/uevent$DEVICENAME
+		source /tmp/uevent$DEVICENAME
+		rm -f /tmp/uevent$DEVICENAME
+		if [ $4 -eq 1 ]; then
+			log "Driver Name : $fcntr $DRIVER"
+		fi
 		if [ "$DRIVER" = "option" -o "$DRIVER" = "qcserial" -o "$DRIVER" = "usb_serial" -o drv[j] == "usb_serial" -o "$DRIVER" = "sierra" ]; then
 			let serialcnt=$serialcnt+1
 		fi
+		let cntr=$cntr-1
+		if [ "$cntr" -lt 1 ]; then
+			break
+		fi
 	fi
-	let cntr=$cntr+1
+	let fcntr=$fcntr+1
 done
-cntr=0
+cntr=$(cat $path"bNumInterfaces")
+cntr=$(echo "$cntr" | sed 's/[[:space:]]//g')
+fcntr=0
 while [ true ]; do
-	if [ ! -e $path$ipath$cntr ]; then
-		break
-	else
-		cat $path$ipath$cntr"/uevent" > /tmp/uevent
-		source /tmp/uevent
-		rm -f /tmp/uevent
+	if [ -e $path$ipath$fcntr ]; then
+		cat $path$ipath$fcntr"/uevent" > /tmp/uevent$DEVICENAME
+		source /tmp/uevent$DEVICENAME
+		rm -f /tmp/uevent$DEVICENAME
 		case $DRIVER in
 			"sierra_net" )
 				retval=1
@@ -76,8 +89,12 @@ while [ true ]; do
 				break
 			;;
 		esac
+		let cntr=$cntr-1
+		if [ "$cntr" -lt 1 ]; then
+			break
+		fi
 	fi
-	let cntr=$cntr+1
+	let fcntr=$fcntr+1
 done
 if [ $serialcnt -gt 0 -a $retval -eq 0 ]; then
 	retval=11
