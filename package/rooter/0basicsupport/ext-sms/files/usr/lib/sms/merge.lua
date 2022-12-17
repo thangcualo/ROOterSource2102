@@ -28,42 +28,36 @@ repeat
 		message['phone'] = filein:read("*line")
 		nline = filein:read("*line")
 		message['nline'] = nline
+		nline = tonumber(nline)
+		nc = nline
 		ncntr = 1
 		msg=""
 		message['msgnum'] = "xxx"
 		message['msgord'] = "xxx"
 		message['msgmax'] = "xxx"
 		lines = filein:read("*line")
-		s, e = lines:find("Msg# ")
-		if s ~= nil then
-			bs, be = lines:find(",", e+1)
-			msgnum = lines:sub(e+1, be-1)
+		if lines == nil then
+			s = nil
+		else
+			s, msgnum, msgord, msgmax = lines:match("(Msg# (%d+),(%d+)/(%d+))")
+		end
+		if s == nil then
+			nc = nc + 1
+		else
 			message['msgnum'] = msgnum
-			s, e = lines:find("/", be+1)
-			msgord = lines:sub(be+1, e-1)
 			message['msgord'] = msgord
-			message['msgmax'] = lines:sub(e+1)
+			message['msgmax'] = msgmax
 			lines = filein:read("*line")
 		end
 		msg = lines
-		nc = tonumber(nline)
 		if nc > 2 then
 			for i=1,nc-2,1
 			do
 				lines = filein:read("*line")
-				if lines ~= "" then
-					msg = msg .. "\n" .. lines
+				if lines == "" then
+					msg = msg .. "\n"
 				else
-					if i == nc-2 then
-						if msgord == message['msgmax'] then
-							msg = msg .. "\n\n"
-						else
-							msg = msg .. "\n\n"
-						end
-					else
-						msg = msg .. "\n"
-						
-					end
+					msg = msg .. "\n" .. lines
 				end
 			end
 			--print(nln, msg)
@@ -72,11 +66,9 @@ repeat
 		message['msg'] = msg
 		message['numlines'] = nc - 1
 		sht = filein:read("*line")
-		s, e = sht:find("Msg#")
+		s, sht1, sht2 = sht:match("((.*)Msg# %d+,%d+/%d%s*(.*))")
 		if s ~= nil then
-			shtt = sht:sub(1, s-1)
-			bs, be = sht:find("/", e)
-			sht = shtt .. sht:sub(be+2)
+			sht = sht1 .. sht2
 		end
 		message['short'] = sht
 		overall[message['slot']] = message
@@ -142,7 +134,7 @@ do
 			end
 			fileout:write(msgtmp, "\n")
 			fileout:write(overall[tostring(i)]['phone'], "\n")
-			
+
 			if mflg ~= 0 then
 				msg = "Partial Message : " .. msg
 				t = short:gsub("%s+", " ")
@@ -161,5 +153,3 @@ do
 	end
 end
 fileout:close()
-
-

@@ -157,7 +157,7 @@ check_apn() {
 	CGDCONT2=$(echo $OX | grep "+CGDCONT: 2,")
 	if [ -z "$CGDCONT2" ]; then
 		ATCMDD="AT+CGDCONT=2,\"$IPVAR\",\"ims\""
-		OXy=$($ROOTER/gcom/gcom-locked "$COMMPORT" "run-at.gcom" "$CURRMODEM" "$ATCMDD")
+		OX=$($ROOTER/gcom/gcom-locked "$COMMPORT" "run-at.gcom" "$CURRMODEM" "$ATCMDD")
 	fi
 	if `echo $OX | grep "+CGDCONT: $CID,\"$IPVAR\",\"$NAPN\"," 1>/dev/null 2>&1`
 	then
@@ -302,6 +302,10 @@ chkraw() {
 	elif [ $idV = 2cb7 -a $idP = 0104 ]; then
 		RAW=1
 	elif [ $idV = 413c -a $idP = 81d7 ]; then
+		RAW=1
+	elif [ $idV = 413c -a $idP = 81e0 ]; then
+		RAW=1
+	elif [ $idV = 12d1 -a $idP = 1506 ]; then
 		RAW=1
 	fi
 }
@@ -784,6 +788,9 @@ if [ -n "$CHKPORT" ]; then
 
 	if [ -e /tmp/simpin$CURRMODEM ]; then
 		log " SIM Error"
+		if [ -e $ROOTER/simerr.sh ]; then
+			$ROOTER/simerr.sh $CURRMODEM
+		fi
 		exit 0
 	fi
 	if [ -e /usr/lib/gps/gps.sh ]; then
@@ -1015,6 +1022,10 @@ do
 
 		if [ -e $ROOTER/modem-led.sh ]; then
 			$ROOTER/modem-led.sh $CURRMODEM 2
+		fi
+		
+		if [ -e $ROOTER/connect/chkconn.sh ]; then
+			$ROOTER/connect/chkconn.sh $CURRMODEM &
 		fi
 
 		BRK=0
