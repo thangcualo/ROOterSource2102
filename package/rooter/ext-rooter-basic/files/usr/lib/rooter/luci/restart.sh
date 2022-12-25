@@ -51,6 +51,7 @@ if [ "$2" != "9" -a "$2" != "11" ]; then
 	fi
 fi
 
+jkillall chkconn.sh
 if [ "$2" != "9" -a "$2" != "11" ]; then # disconnect
 	uci set modem.modem$CURRMODEM.connected=0
 	uci commit modem
@@ -70,6 +71,17 @@ else # restart
 		fi
 		log "Hard modem reset done"
 	#fi
+	bn=$(cat /tmp/sysinfo/board_name)
+	bn=$(echo "$bn" | grep "mk01k21")
+	if [ ! -z "$bn" ]; then
+		i=496
+		echo $i > /sys/class/gpio/export
+		echo "out" > /sys/class/gpio/gpio$i/direction
+		echo "1" > /sys/class/gpio/gpio$i/value
+		sleep 5
+		echo "0" > /sys/class/gpio/gpio$i/value
+		log "Power Toggle"
+	fi
 	ifdown wan$INTER
 	uci delete network.wan$CURRMODEM
 	uci set network.wan$CURRMODEM=interface
