@@ -62,6 +62,12 @@ tt:value("117", "TTL 117")
 tt:value("TTL-INC 1", "TTL-INC 1")
 tt.default = "0"
 
+tnl = di:taboption(this_tab, ListValue, "ttloption", translate("TTL Settings"));
+tnl:value("0", translate("POSTROUTING and PREROUTING (Default)"))
+tnl:value("1", translate("POSTROUTING only"))
+tnl:value("2", translate("POSTROUTING with ICMP passthrough (May use minimal hotspot data)"))
+tnl.default=0
+
 ynl = di:taboption(this_tab, ListValue, "hostless", translate("Adjust TTL for Hostless Modem"));
 ynl:value("0", "No")
 ynl:value("1", translate("Yes"))
@@ -104,12 +110,19 @@ mtz:value("0", "No")
 mtz:value("1", translate("Yes"))
 mtz.default=1
 
-ml = di:taboption(this_tab, ListValue, "lock", translate("Lock to Provider :"));
-ml:value("0", translate("No"))
-ml:value("1", translate("Hard"))
-ml:value("2", translate("Soft"))
-ml.default=0
-
+if profsave == "1" then
+	ml = di:taboption(this_tab, ListValue, "lock", translate("Allow Roaming :"));
+	ml:value("0", translate("Yes"))
+	ml:value("1", translate("No - Hard Lock"))
+	ml:value("2", translate("Yes - Soft Lock"))
+	ml.default=0
+else
+	ml = di:taboption(this_tab, ListValue, "lock", translate("Lock to Provider :"));
+	ml:value("0", translate("No"))
+	ml:value("1", translate("Hard"))
+	ml:value("2", translate("Soft"))
+	ml.default=0
+end
 mcc = di:taboption(this_tab, Value, "mcc", translate("Provider Country Code :"));
 mcc.optional=false; 
 mcc.rmempty = true;
@@ -200,10 +213,8 @@ this_tab = "connect"
 alive = di:taboption(this_tab, ListValue, "alive", translate("Connection Monitoring Status :")); 
 alive.rmempty = true;
 alive:value("0", translate("Disabled"))
-alive:value("1", translate("Enabled"))
 alive:value("2", translate("Enabled with Router Reboot"))
-alive:value("3", translate("Enabled with Modem Reconnect"))
-alive:value("4", translate("Enabled with Power Toggle or Modem Reconnect"))
+alive:value("3", translate("Enabled with Modem Restart"))
 alive.default=0
 
 reliability = di:taboption(this_tab, Value, "reliability", translate("Tracking reliability"),
@@ -506,6 +517,12 @@ tt:value("117", "TTL 117")
 tt:value("TTL-INC 1", "TTL-INC 1")
 tt.default = "0"
 
+ttnl = s:taboption(this_ctab, ListValue, "ttloption", translate("TTL Settings"));
+ttnl:value("0", translate("POSTROUTING and PREROUTING (Default)"))
+ttnl:value("1", translate("POSTROUTING only"))
+ttnl:value("2", translate("POSTROUTING with ICMP passthrough (May use minimal hotspot data)"))
+ttnl.default=0
+
 nl = s:taboption(this_ctab, ListValue, "hostless", translate("Adjust TTL for Hostless Modem"));
 nl:value("0", translate("No"))
 nl:value("1", translate("Yes"))
@@ -548,11 +565,19 @@ cmtz:value("0", translate("No"))
 cmtz:value("1", translate("Yes"))
 cmtz.default=1
 
-cml = s:taboption(this_ctab, ListValue, "lock", translate("Lock to Provider :"));
-cml:value("0", translate("No"))
-cml:value("1", translate("Hard"))
-cml:value("2", translate("Soft"))
-cml.default=0
+if profsave == "1" then
+	cml = s:taboption(this_ctab, ListValue, "lock", translate("Allow Roaming :"));
+	cml:value("0", translate("Yes"))
+	cml:value("1", translate("No - Hard Lock"))
+	cml:value("2", translate("No - Soft Lock"))
+	cml.default=0
+else
+	cml = s:taboption(this_ctab, ListValue, "lock", translate("Lock to Provider :"));
+	cml:value("0", translate("No"))
+	cml:value("1", translate("Hard"))
+	cml:value("2", translate("Soft"))
+	cml.default=0
+end
 
 cmcc = s:taboption(this_ctab, Value, "mcc", translate("Provider Country Code :"));
 cmcc.optional=false; 
@@ -650,10 +675,8 @@ this_ctab = "cconnect"
 calive = s:taboption(this_ctab, ListValue, "alive", translate("Connection Monitoring Status :")); 
 calive.rmempty = true;
 calive:value("0", translate("Disabled"))
-calive:value("1", translate("Enabled"))
 calive:value("2", translate("Enabled with Router Reboot"))
-calive:value("3", translate("Enabled with Modem Reconnect"))
-calive:value("4", translate("Enabled with Power Toggle or Modem Reconnect"))
+calive:value("3", translate("Enabled with Modem Restart"))
 calive.default=0
 
 reliability = s:taboption(this_ctab, Value, "reliability", translate("Tracking reliability"),
