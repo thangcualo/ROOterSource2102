@@ -945,19 +945,6 @@
 		"ext2": "-upgrade.bin",
 		"addons": ["flash-rbm33.pdf", "tftpd32.chm", "tftpd32.exe", "tftpd32.ini", "readme.pdf"]
 	},
-	"RBM11G": {
-		"details": "Mikrotik RBM11G",
-		"type": "2",
-		"build": "2102",
-		"config": ".config_rbm11g",
-		"image1": "openwrt-ramips-mt7621-mikrotik_routerboard-m11g-initramfs-kernel.bin",
-		"image2": "openwrt-ramips-mt7621-mikrotik_routerboard-m11g-squashfs-sysupgrade.bin",
-		"imagepath": "/ramips/mt7621/",
-		"mod": "Mikrotik-RBM11G",
-		"ext1": "-factory.bin",
-		"ext2": "-update.bin",
-		"addons": ["flash-rbm33.pdf", "tftpd32.chm", "tftpd32.exe", "tftpd32.ini", "readme.pdf"]
-	},
 	"RBM33G": {
 		"details": "Mikrotik RBM33G",
 		"type": "2",
@@ -1222,28 +1209,6 @@
 				"hostname": "ROOter"
 			}
 		}
-	},
-	"WG1608": {
-		"details": "ZBT WG1608",
-		"type": "1",
-		"build": "2102",
-		"config": ".config_wg1608",
-		"image": "openwrt-ramips-mt7621-zbtlink_zbt-wg1608-16m-squashfs-sysupgrade.bin",
-		"imagepath": "/ramips/mt7621/",
-		"mod": "ZBT-WG1608",
-		"ext": "-upgrade.bin",
-		"addons": ["readme.pdf", "readmerecovery.txt"]
-	},
-	"WG1608-32": {
-		"details": "ZBT WG1608-32M",
-		"type": "1",
-		"build": "2102",
-		"config": ".config_wg1608-32",
-		"image": "openwrt-ramips-mt7621-zbtlink_zbt-wg1608-32m-squashfs-sysupgrade.bin",
-		"imagepath": "/ramips/mt7621/",
-		"mod": "Zbt-WG1608-32M",
-		"ext": "-upgrade.bin",
-		"addons": ["readme.pdf", "readmerecovery.txt"]
 	},
 	"WG3526": {
 		"details": "ZBT WG3526",

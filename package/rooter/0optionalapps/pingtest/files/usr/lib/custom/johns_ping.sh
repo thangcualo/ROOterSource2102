@@ -23,9 +23,9 @@ doping() {
 	TYPE=$(uci get ping.ping.type)
 	if [ $TYPE = "1" ]; then
 	log "Curl"
-		RETURN_CODE_1=$(curl -m 10 -s -o /dev/null -w "%{http_code}" $ipv41)
-		RETURN_CODE_2=$(curl --ipv6 -m 10 -s -o /dev/null -w "%{http_code}" $ipv6)
-		RETURN_CODE_3=$(curl -m 10 -s -o /dev/null -w "%{http_code}" $ipv42)
+		RETURN_CODE_1=$(curl -s -m 10 -s -o /dev/null -w "%{http_code}" $ipv41)
+		RETURN_CODE_2=$(curl -s --ipv6 -m 10 -s -o /dev/null -w "%{http_code}" $ipv6)
+		RETURN_CODE_3=$(curl -s -m 10 -s -o /dev/null -w "%{http_code}" $ipv42)
 	else
 	log "Ping"
 		tping "$ipv41"; RETURN_CODE_1=$tmp
@@ -64,8 +64,17 @@ ptest() {
 }
 
 ipv41=$(uci -q get ping.ping.ipv41)
+if [ -z "$ipv41" ]; then
+	ipv41="http://www.google.com/"
+fi
 ipv42=$(uci -q get ping.ping.ipv42)
+if [ -z "$ipv42" ]; then
+	ipv42="https://github.com"
+fi
 ipv6=$(uci -q get ping.ping.ipv6)
+if [ -z "$ipv6" ]; then
+	ipv6="http://ipv6.google.com"
+fi
 uci set ping.ping.conn="4"
 uci commit ping
 	

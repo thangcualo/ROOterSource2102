@@ -650,7 +650,7 @@ uci commit modem.modem$CURRMODEM
 #
 	"4"|"6"|"7"|"24"|"26"|"27" )
 		if [ "$idV" = "2c7c" -a "$idP" = "0900" ]; then
-			ATCMDD='AT+QCFG="usbnet",2'
+			ATCMDD='AT+QCFG="usbnet",1'
 			OX=$($ROOTER/gcom/gcom-locked "/dev/ttyUSB2" "run-at.gcom" "$CURRMODEM" "$ATCMDD")
 			ATCMDD='AT+CFUN=1,1'
 			OX=$($ROOTER/gcom/gcom-locked "/dev/ttyUSB2" "run-at.gcom" "$CURRMODEM" "$ATCMDD")
@@ -701,6 +701,17 @@ fi
 if [ -e $ROOTER/connect/preconnect.sh ]; then
 	if [ "$RECON" != "2" ]; then
 		$ROOTER/connect/preconnect.sh $CURRMODEM
+	fi
+fi
+
+if [ $idV = 413c -a $idP = 81d8 ]; then
+	ATCMDD="AT+CFUN?"
+	OX=$($ROOTER/gcom/gcom-locked "/dev/ttyUSB$CPORT" "run-at.gcom" "$CURRMODEM" "$ATCMDD")
+	if `echo $OX | grep -o "5" >/dev/null 2>&1`; then
+		ATCMDD='at^nv=2497,1,"01";+reset'
+		OX=$($ROOTER/gcom/gcom-locked "/dev/ttyUSB$CPORT" "run-at.gcom" "$CURRMODEM" "$ATCMDD")
+		/usr/lib/rooter/luci/restart.sh $CURRMODEM 11
+		exit 0
 	fi
 fi
 
@@ -802,6 +813,9 @@ if [ -n "$CHKPORT" ]; then
 		log " SIM Error"
 		if [ -e $ROOTER/simerr.sh ]; then
 			$ROOTER/simerr.sh $CURRMODEM
+			if [ -e $ROOTER/connect/chkconn.sh ]; then
+				jkillall chkconn.sh
+			fi
 		fi
 		exit 0
 	fi
@@ -1086,16 +1100,21 @@ do
 	# QMI connect script
 	#
 		"2" )
-			check_apn
-			$ROOTER/qmi/connectqmi.sh $CURRMODEM cdc-wdm$WDMNX $NAUTH $NAPN $NUSER $NPASS $RAW $DHCP $PINC
-			if [ $? = 0 ]; then
-				ifup wan$INTER
-				[ -f /tmp/ipv6supp$INTER ] && addv6
-			else
-				#log "Restart Modem"
-				#/usr/lib/rooter/luci/restart.sh $CURRMODEM
-				exit 0
+			if [ -n "$CPORT" ]; then
+				check_apn
 			fi
+			log "Using Netifd Method"
+
+			uci delete network.wan$INTER
+			uci set network.wan$INTER=interface
+			uci set network.wan$INTER.proto=qmi
+			uci set network.wan$INTER.device=/dev/cdc-wdm$WDMNX
+			uci set network.wan$INTER.metric=$INTER"0"
+			uci set network.wan$INTER.currmodem=$CURRMODEM
+			uci -q commit network
+			rm -f /tmp/usbwait
+			ifup wan$INTER
+			exit 0
 			;;
 	#
 	# NCM connect script
