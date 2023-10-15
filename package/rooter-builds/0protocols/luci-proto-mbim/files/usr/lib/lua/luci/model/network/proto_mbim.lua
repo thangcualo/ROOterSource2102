@@ -6,7 +6,7 @@ local interface = luci.model.network.interface
 local proto = netmod:register_protocol("mbim")
 
 function proto.get_i18n(self)
-	return luci.i18n.translate("MBIM Cellular")
+	return luci.i18n.translate("MBIM")
 end
 
 function proto.ifname(self)
@@ -25,7 +25,7 @@ function proto.get_interface(self)
 end
 
 function proto.opkg_package(self)
-	return "rmbim"
+	return "umbim"
 end
 
 function proto.is_installed(self)
